@@ -1283,6 +1283,32 @@ describe('Client', function() {
             });
         });
     });
+    
+    describe('lru_crawler metadump', function () {
+        var cache;
+        beforeEach(function() {
+            cache = new Client();
+        });
+
+        it('exists', function() {
+            cache.should.have.property('items');
+        });
+
+        describe('should work', function() {
+            it('gets cache metadump', function (done) {
+                var key = getKey();
+
+                cache.set(key, 'test').then(function() {
+                    return cache.items();
+                }).then(function (items) {
+                    return cache.metadump(items[0].slab_id);
+                }).then(function (data) {
+                    expect(data[0].key).to.be.defined;
+                    done();
+                });
+            });
+        });
+    });
 
     describe('version', function () {
         var cache;
